@@ -53,13 +53,13 @@ public class UserServiceImpl implements UserService {
         }
 
         /* validar que el usuario no se haya registrado obteniendo el nombre */
-        if (userDb.orElseThrow().getName() != "" ) {
+        if (userDb.orElseThrow().getName() != "" && userDb.orElseThrow().getName() != null) {
             response.put("message", "no puedes registrarte nuevamente con este correo!");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
 
         /* validar que no exista el nombre de usuario ni el numero de telefono */
-        if (userDb.get().getUsername().equals(userDto.getUsername())) {
+        if (userDb.get().getUsername() == userDto.getUsername()) {
             response.put("message", "El nombre de usuario ya existe!");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
