@@ -7,11 +7,11 @@ CREATE TABLE roles(
 
 CREATE TABLE users(
 	id SERIAL PRIMARY KEY,
-	username VARCHAR(50) UNIQUE KEY,
+	username VARCHAR(50) UNIQUE,
 	name VARCHAR(50),
 	lastname VARCHAR(50),
-	email VARCHAR(100) NOT NULL UNIQUE KEY,
-	phone INT UNIQUE KEY,
+	email VARCHAR(100) NOT NULL UNIQUE,
+	phone INT UNIQUE,
 	password TEXT,
 	role_id INT REFERENCES roles(id) NOT NULL,
 	availability BOOLEAN DEFAULT true,
