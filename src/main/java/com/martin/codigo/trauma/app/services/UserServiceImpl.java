@@ -24,7 +24,7 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @Transactional
+    @Transactional(readOnly=true)
     @Override
     public ResponseEntity<Map<String, Object>> findEmail(Map<String, String> request) {
         Map<String, Object> response = new HashMap<>();
@@ -51,6 +51,18 @@ public class UserServiceImpl implements UserService {
             response.put("message", "El usuario con el correo: " + userDto.getEmail() + " no existe!");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
+
+        /* validar que no exista el nombre de usuario ni el numero de telefono */
+        if( userDb.get().getUsername().equals(userDto.getUsername()) ){
+            response.put("message","El nombre de usuario ya existe!");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
+
+        if(userDb.get().getPhone() == userDto.getPhone()){
+            response.put("message","El numero de telefono ya existe!");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
+
 
         User user = userDb.orElseThrow();
         user.setUsername(userDto.getUsername());

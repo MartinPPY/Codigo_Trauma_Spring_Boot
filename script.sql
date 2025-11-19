@@ -7,13 +7,13 @@ CREATE TABLE roles(
 
 CREATE TABLE users(
 	id SERIAL PRIMARY KEY,
-	username VARCHAR(50),
+	username VARCHAR(50) UNIQUE KEY,
 	name VARCHAR(50),
 	lastname VARCHAR(50),
-	email VARCHAR(100) NOT NULL,
-	phone INT,
+	email VARCHAR(100) NOT NULL UNIQUE KEY,
+	phone INT UNIQUE KEY,
 	password TEXT,
-	role_id INT REFERENCES roles(id),
+	role_id INT REFERENCES roles(id) NOT NULL,
 	availability BOOLEAN DEFAULT true,
 	expired BOOLEAN DEFAULT true,
 	enabled BOOLEAN DEFAULT true,
@@ -30,8 +30,9 @@ CREATE TABLE emergencies(
 CREATE TABLE users_emergencies(
 	user_id INT REFERENCES users(id),
 	emergency_id INT REFERENCES emergencies(id),
-	severity VARCHAR(20),
-	status VARCHAR(20),
+	severity VARCHAR(20) NOT NULL,
+	status VARCHAR(20) NOT NULL,
+	comments TEXT,
 	creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	update_at TIMESTAMP,
 	finished_at TIMESTAMP
