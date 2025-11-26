@@ -2,6 +2,7 @@ package com.martin.codigo.trauma.app.models;
 
 public class UserDto {
 
+    private Long id;
     private String username;
     private String name;
     private String lastname;
@@ -23,7 +24,8 @@ public class UserDto {
         this.email = email;
     }
 
-    public UserDto(String name, String lastname, Integer phone, String email, Boolean availability) {
+    public UserDto(Long id,String name, String lastname, Integer phone, String email, Boolean availability) {
+        this.id = id;
         this.name = name;
         this.lastname = lastname;
         this.phone = phone;
@@ -86,6 +88,16 @@ public class UserDto {
     public void setAvailability(Boolean availability) {
         this.availability = availability;
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    
 
     
 
