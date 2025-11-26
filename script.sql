@@ -28,6 +28,7 @@ CREATE TABLE emergencies(
 );
 
 CREATE TABLE users_emergencies(
+	id SERIAL PRIMARY KEY,
 	user_id INT REFERENCES users(id),
 	emergency_id INT REFERENCES emergencies(id),
 	severity VARCHAR(20) NOT NULL,
@@ -37,6 +38,24 @@ CREATE TABLE users_emergencies(
 	update_at TIMESTAMP,
 	finished_at TIMESTAMP
 );
+
+-- TRIGGER PARA CAMBIAR LA DISPONIBILIDAD DE LOS USUARIOS CUANDO SE LES ASIGNA UNA EMERGENCIA
+CREATE OR REPLACE FUNCTION set_user_unavailable()
+RETURNS TRIGGER AS $$
+BEGIN
+    UPDATE users
+    SET availability = false
+    WHERE id = NEW.user_id;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trg_set_user_unavailable
+AFTER INSERT ON users_emergencies
+FOR EACH ROW
+EXECUTE FUNCTION set_user_unavailable();
+
 
 
 -- INSERCIÓN DE DATOS
