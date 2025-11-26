@@ -38,6 +38,7 @@ CREATE TABLE users_emergencies(
 	finished_at TIMESTAMP
 );
 
+
 -- INSERCIÓN DE DATOS
 
 INSERT INTO roles (name) VALUES('ROLE_ADMIN');

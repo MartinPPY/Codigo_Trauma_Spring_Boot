@@ -27,7 +27,7 @@ public class AuthController {
 
     @PutMapping("/register-user")
     ResponseEntity<Map<String, Object>> updateUser(@RequestBody UserDto userDto) {
-        return userService.save(userDto);
+        return userService.registerUser(userDto);
     }
 
 

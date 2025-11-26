@@ -1,6 +1,7 @@
 package com.martin.codigo.trauma.app.services;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -43,7 +44,7 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public ResponseEntity<Map<String, Object>> save(UserDto userDto) {
+    public ResponseEntity<Map<String, Object>> registerUser(UserDto userDto) {
         Map<String, Object> response = new HashMap<>();
         Optional<User> userDb = userRepository.findEmail(userDto.getEmail());
 
@@ -82,6 +83,18 @@ public class UserServiceImpl implements UserService {
 
         return ResponseEntity.ok().body(response);
 
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public ResponseEntity<List<UserDto>> findAllMedics() {
+        return ResponseEntity.status(HttpStatus.OK).body(userRepository.findAllMedics());
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public ResponseEntity<List<UserDto>> findAllAvailabilityMedics(Boolean availability) {
+        return ResponseEntity.status(HttpStatus.OK).body(userRepository.findAllAvailabilityMedics(availability));
     }
 
 }

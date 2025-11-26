@@ -8,6 +8,7 @@ public class UserDto {
     private Integer phone;
     private String password;
     private String email;
+    private Boolean availability;
 
     public UserDto() {
 
@@ -20,6 +21,14 @@ public class UserDto {
         this.phone = phone;
         this.password = password;
         this.email = email;
+    }
+
+    public UserDto(String name, String lastname, Integer phone, String email, Boolean availability) {
+        this.name = name;
+        this.lastname = lastname;
+        this.phone = phone;
+        this.email = email;
+        this.availability = availability;
     }
 
     public String getUsername() {
@@ -69,6 +78,16 @@ public class UserDto {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    public Boolean getAvailability() {
+        return availability;
+    }
+
+    public void setAvailability(Boolean availability) {
+        this.availability = availability;
+    }
+
+    
 
     
 

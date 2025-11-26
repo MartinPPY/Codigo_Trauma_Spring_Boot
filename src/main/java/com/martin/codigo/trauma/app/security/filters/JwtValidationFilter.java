@@ -42,7 +42,7 @@ public class JwtValidationFilter extends BasicAuthenticationFilter {
             return;
         }
 
-        String token = header.replace(PREFIX, "");
+        String token = header.replace(PREFIX, "").trim();
 
         try {
             Claims claims = Jwts.parser().verifyWith(SECRET_KEY).build().parseSignedClaims(token).getPayload();
