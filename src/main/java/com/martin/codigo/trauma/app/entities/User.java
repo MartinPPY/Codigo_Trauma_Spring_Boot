@@ -1,12 +1,14 @@
 package com.martin.codigo.trauma.app.entities;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
@@ -17,32 +19,24 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String username;
-
     private String name;
-
     private String lastname;
-
     private String email;
-
     private Integer phone;
-
     private String password;
+    private Boolean availability;
+    private Boolean expired;
+    private Boolean enabled;
+    private Boolean blocked;
+    private LocalDateTime creation;
 
     @ManyToOne
     @JoinColumn(name = "role_id")
     private Role role;
 
-    private Boolean availability;
-
-    private Boolean expired;
-
-    private Boolean enabled;
-
-    private Boolean blocked;
-
-    private LocalDateTime creation;
+    @ManyToMany(mappedBy = "users")
+    private List<Emergency> emergencies;
 
     public User() {
     }

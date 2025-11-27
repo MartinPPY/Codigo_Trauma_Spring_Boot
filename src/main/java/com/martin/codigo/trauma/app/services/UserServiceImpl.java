@@ -55,6 +55,7 @@ public class UserServiceImpl implements UserService {
 
         /* validar que el usuario no se haya registrado obteniendo el nombre */
         if (userDb.orElseThrow().getName() != "" && userDb.orElseThrow().getName() != null) {
+            System.out.println(userDb.orElseThrow().getName());
             response.put("message", "no puedes registrarte nuevamente con este correo!");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }

@@ -41,9 +41,8 @@ public class AdminController {
     }
 
     @GetMapping("/emergencies")
-    ResponseEntity<Map<String, Object>> getEmergencies() {
-
-        return null;
+    List<EmergencyDto> getEmergencies() {
+        return emergencyService.findDtoEmergencies();
     }
 
 }

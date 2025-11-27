@@ -7,16 +7,9 @@ ademas esta una plantilla de como deben de ser las variables de entorno
 
 ## Como instalar la base de datos
 
-Con docker instalado e inicializado debes ejecutar esto en la terminal:
+Con docker instalado y funcionando debes ejecutar esto en la terminal:
 ´ docker-compose up -d ´
 
-tambien adjuntare la arquitectura del proyecto en si
-
-![arquitectura general](diagrama_arquitectura.drawio.png)
-
-modelo relacional
-
-![mer_codigo_trauma](mer.png)
 
 ### Reference Documentation
 

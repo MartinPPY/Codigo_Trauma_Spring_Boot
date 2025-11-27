@@ -9,10 +9,14 @@ public class EmergencyDto {
     private Integer victims;
     private String severity;
     private Integer[] medics;
-    private String[] medicsNames;
+    private LocalDateTime creation;
     private LocalDateTime updateAt;
     private LocalDateTime finishedAt;
     private String comments;
+
+    public EmergencyDto(){
+        
+    }
 
     // PARA INSERTAR EMERGENCIAS
     public EmergencyDto(String description, Integer victims, String severity, Integer[] medics) {
@@ -23,8 +27,16 @@ public class EmergencyDto {
     }
 
     // CONSTRUCTOR PARA MOSTRAR EMERGENCIAS Y ACTUALIZARLAS
-    public EmergencyDto(Long id, String description, Integer victims, String severity, String[] medicsNames,
-            LocalDateTime updateAt, LocalDateTime finishedAt, String comments) {
+    public EmergencyDto(Long id, String description, Integer victims, String severity,
+            LocalDateTime updateAt, LocalDateTime finishedAt, String comments, LocalDateTime creation) {
+        this.id = id;
+        this.description = description;
+        this.victims = victims;
+        this.severity = severity;
+        this.updateAt = updateAt;
+        this.finishedAt = finishedAt;
+        this.comments = comments;
+        this.creation = creation;
 
     }
 
@@ -68,14 +80,6 @@ public class EmergencyDto {
         this.id = id;
     }
 
-    public String[] getMedicsNames() {
-        return medicsNames;
-    }
-
-    public void setMedicsNames(String[] medicsNames) {
-        this.medicsNames = medicsNames;
-    }
-
     public LocalDateTime getUpdateAt() {
         return updateAt;
     }
@@ -99,5 +103,15 @@ public class EmergencyDto {
     public void setComments(String comments) {
         this.comments = comments;
     }
+
+    public LocalDateTime getCreation() {
+        return creation;
+    }
+
+    public void setCreation(LocalDateTime creation) {
+        this.creation = creation;
+    }
+
+    
 
 }

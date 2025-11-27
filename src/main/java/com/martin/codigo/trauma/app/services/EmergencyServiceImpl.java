@@ -1,6 +1,8 @@
 package com.martin.codigo.trauma.app.services;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -12,10 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.martin.codigo.trauma.app.entities.Emergency;
 import com.martin.codigo.trauma.app.entities.User;
-import com.martin.codigo.trauma.app.entities.UserEmergency;
 import com.martin.codigo.trauma.app.models.EmergencyDto;
 import com.martin.codigo.trauma.app.repositories.EmergencyRepository;
-import com.martin.codigo.trauma.app.repositories.UserEmergencyRepository;
 import com.martin.codigo.trauma.app.repositories.UserRepository;
 
 @Service
@@ -27,14 +27,12 @@ public class EmergencyServiceImpl implements EmergencyService {
     @Autowired
     private EmergencyRepository emergencyRepository;
 
-    @Autowired
-    private UserEmergencyRepository userEmergencyRepository;
-
     @Transactional
     @Override
     public ResponseEntity<Map<String, Object>> registerEmergency(EmergencyDto emergencyDto) {
 
         Map<String, Object> response = new HashMap<>();
+        List<User> medics = new ArrayList<>();
 
         /* Validar que existen los medicos */
         for (Integer id : emergencyDto.getMedics()) {
@@ -43,20 +41,38 @@ public class EmergencyServiceImpl implements EmergencyService {
                 response.put("message", "El medico no existe en la base de datos!");
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
             }
+
+            /* validar que esten disponibles */
+            if(userDb.orElseThrow().getAvailability() == false){
+                response.put("message", "Medico no disponible. Escoja otro!");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+            }
+
+            /* validar que los usuarios no sean administradores */
+            if (userDb.orElseThrow().getRole().getId() == 1) {
+                response.put("message", "Los administradores no pueden atender emergencias!");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+            }
+
+            /* agregar a los medicos a la lista de usuarios */
+            medics.add(userDb.orElseThrow());
+
         }
 
-        Emergency emergency = new Emergency(emergencyDto.getDescription(), emergencyDto.getVictims());
+        Emergency emergency = new Emergency(emergencyDto.getDescription(), emergencyDto.getVictims(),
+                emergencyDto.getSeverity(), medics);
+
         emergencyRepository.save(emergency);
 
-        /* inserta en la tabla users_emergencies */
-        for (Integer id : emergencyDto.getMedics()) {
-            Optional<User> userDb = userRepository.findById(id.longValue());
-            User user = userDb.orElseThrow();
-            UserEmergency userEmergency = new UserEmergency(user, emergency, emergencyDto.getSeverity());
-            userEmergencyRepository.save(userEmergency);
-        }
+        response.put("message", "emergencia creada!, se les informara a los medicos!");
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @Override
+    public List<EmergencyDto> findDtoEmergencies() {
+
+        return null;
     }
 
 }

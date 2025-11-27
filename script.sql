@@ -24,19 +24,19 @@ CREATE TABLE users(
 CREATE TABLE emergencies(
 	id SERIAL PRIMARY KEY,
 	description TEXT,
-	victims INT
-);
-
-CREATE TABLE users_emergencies(
-	id SERIAL PRIMARY KEY,
-	user_id INT REFERENCES users(id),
-	emergency_id INT REFERENCES emergencies(id),
+	victims INT,
 	severity VARCHAR(20) NOT NULL,
 	status VARCHAR(20) NOT NULL,
 	comments TEXT,
 	creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	update_at TIMESTAMP,
 	finished_at TIMESTAMP
+);
+
+CREATE TABLE users_emergencies(
+	user_id INT REFERENCES users(id) NOT NULL,
+	emergency_id INT REFERENCES emergencies(id) NOT NULL,
+	PRIMARY KEY (user_id,emergency_id)	
 );
 
 -- TRIGGER PARA CAMBIAR LA DISPONIBILIDAD DE LOS USUARIOS CUANDO SE LES ASIGNA UNA EMERGENCIA
