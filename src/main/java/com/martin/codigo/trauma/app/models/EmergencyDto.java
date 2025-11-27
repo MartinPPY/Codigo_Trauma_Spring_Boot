@@ -1,6 +1,7 @@
 package com.martin.codigo.trauma.app.models;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class EmergencyDto {
 
@@ -13,9 +14,11 @@ public class EmergencyDto {
     private LocalDateTime updateAt;
     private LocalDateTime finishedAt;
     private String comments;
+    private List<String> medicNames;
+    private String status;
 
-    public EmergencyDto(){
-        
+    public EmergencyDto() {
+
     }
 
     // PARA INSERTAR EMERGENCIAS
@@ -26,18 +29,19 @@ public class EmergencyDto {
         this.medics = medics;
     }
 
-    // CONSTRUCTOR PARA MOSTRAR EMERGENCIAS Y ACTUALIZARLAS
-    public EmergencyDto(Long id, String description, Integer victims, String severity,
-            LocalDateTime updateAt, LocalDateTime finishedAt, String comments, LocalDateTime creation) {
+    // CONSTRUCTOR PARA MOSTRAR EMERGENCIAS
+    public EmergencyDto(Long id,String description, Integer victims, String severity, String stauts, String comments,
+            LocalDateTime createAt, LocalDateTime updatedAt, LocalDateTime finishedAt, List<String> medics) {
         this.id = id;
         this.description = description;
         this.victims = victims;
         this.severity = severity;
-        this.updateAt = updateAt;
-        this.finishedAt = finishedAt;
+        this.status = stauts;
         this.comments = comments;
-        this.creation = creation;
-
+        this.creation = createAt;
+        this.updateAt = updatedAt;
+        this.finishedAt = finishedAt;
+        this.medicNames = medics;
     }
 
     public String getDescription() {
@@ -112,6 +116,20 @@ public class EmergencyDto {
         this.creation = creation;
     }
 
-    
+    public List<String> getMedicNames() {
+        return medicNames;
+    }
+
+    public void setMedicNames(List<String> medicNames) {
+        this.medicNames = medicNames;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
 }

@@ -11,6 +11,6 @@ public interface EmergencyService {
 
     ResponseEntity<Map<String, Object>> registerEmergency(EmergencyDto emergencyDto);
 
-    List<EmergencyDto> findDtoEmergencies();
+    List<EmergencyDto> findAllByOrderByCreation();
 
 }

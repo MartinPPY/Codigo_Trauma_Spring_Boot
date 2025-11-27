@@ -119,6 +119,13 @@ public class AdminTest {
 
                                 .andExpect(status().isCreated());
 
+                /* Lista emergencias */
+                mockMvc.perform(
+                                get("/admin/emergencies")
+                                                .contentType(MediaType.APPLICATION_JSON)
+                                                .header("Authorization", "Bearer " + token))
+                                .andExpect(status().isOk());
+
         }
 
 }

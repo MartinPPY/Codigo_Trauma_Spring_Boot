@@ -43,7 +43,7 @@ public class EmergencyServiceImpl implements EmergencyService {
             }
 
             /* validar que esten disponibles */
-            if(userDb.orElseThrow().getAvailability() == false){
+            if (userDb.orElseThrow().getAvailability() == false) {
                 response.put("message", "Medico no disponible. Escoja otro!");
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
             }
@@ -70,9 +70,26 @@ public class EmergencyServiceImpl implements EmergencyService {
     }
 
     @Override
-    public List<EmergencyDto> findDtoEmergencies() {
+    public List<EmergencyDto> findAllByOrderByCreation() {
+        List<EmergencyDto> emergencies = new ArrayList<>();
+        List<String> medicsNames = new ArrayList<>();
 
-        return null;
+        List<Emergency> emergenciesDb = emergencyRepository.findAllByOrderByCreation();
+
+        for (Emergency emergency : emergenciesDb) {
+
+            for (User user : emergency.getUsers()) {
+                medicsNames.add(user.getName() + " " + user.getLastname());
+            }
+
+            EmergencyDto emergencyDto = new EmergencyDto(emergency.getId(), emergency.getDescription(),
+                    emergency.getVictims(),
+                    emergency.getSeverity(), emergency.getStatus(), emergency.getComments(), emergency.getCreatedAt(),
+                    emergency.getUpdatedAt(), emergency.getFinishedAt(), medicsNames);
+            emergencies.add(emergencyDto);
+        }
+
+        return emergencies;
     }
 
 }

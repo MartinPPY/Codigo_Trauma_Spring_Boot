@@ -42,7 +42,7 @@ public class AdminController {
 
     @GetMapping("/emergencies")
     List<EmergencyDto> getEmergencies() {
-        return emergencyService.findDtoEmergencies();
+        return emergencyService.findAllByOrderByCreation();
     }
 
 }
