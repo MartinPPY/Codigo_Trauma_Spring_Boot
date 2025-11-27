@@ -69,15 +69,14 @@ public class EmergencyServiceImpl implements EmergencyService {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<EmergencyDto> findAllByOrderByCreation() {
         List<EmergencyDto> emergencies = new ArrayList<>();
-        List<String> medicsNames = new ArrayList<>();
-
         List<Emergency> emergenciesDb = emergencyRepository.findAllByOrderByCreation();
 
         for (Emergency emergency : emergenciesDb) {
-
+            List<String> medicsNames = new ArrayList<>();
             for (User user : emergency.getUsers()) {
                 medicsNames.add(user.getName() + " " + user.getLastname());
             }
@@ -87,9 +86,7 @@ public class EmergencyServiceImpl implements EmergencyService {
                     emergency.getSeverity(), emergency.getStatus(), emergency.getComments(), emergency.getCreatedAt(),
                     emergency.getUpdatedAt(), emergency.getFinishedAt(), medicsNames);
             emergencies.add(emergencyDto);
-            medicsNames.clear();
         }
-
         return emergencies;
     }
 
