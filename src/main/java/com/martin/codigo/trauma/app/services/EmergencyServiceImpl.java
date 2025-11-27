@@ -54,6 +54,11 @@ public class EmergencyServiceImpl implements EmergencyService {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
             }
 
+            /* Cambiar la disponibilidad del medico */
+            User user = userDb.orElseThrow();
+            user.setAvailability(false);
+            userRepository.save(user);
+
             /* agregar a los medicos a la lista de usuarios */
             medics.add(userDb.orElseThrow());
 
