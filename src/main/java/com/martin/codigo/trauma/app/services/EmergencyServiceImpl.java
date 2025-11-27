@@ -87,6 +87,7 @@ public class EmergencyServiceImpl implements EmergencyService {
                     emergency.getSeverity(), emergency.getStatus(), emergency.getComments(), emergency.getCreatedAt(),
                     emergency.getUpdatedAt(), emergency.getFinishedAt(), medicsNames);
             emergencies.add(emergencyDto);
+            medicsNames.clear();
         }
 
         return emergencies;
