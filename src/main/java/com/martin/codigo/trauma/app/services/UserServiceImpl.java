@@ -1,5 +1,6 @@
 package com.martin.codigo.trauma.app.services;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,7 +13,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.martin.codigo.trauma.app.entities.Emergency;
 import com.martin.codigo.trauma.app.entities.User;
+import com.martin.codigo.trauma.app.models.EmergencyDto;
 import com.martin.codigo.trauma.app.models.UserDto;
 import com.martin.codigo.trauma.app.repositories.UserRepository;
 
@@ -96,6 +99,46 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseEntity<List<UserDto>> findAllAvailabilityMedics(Boolean availability) {
         return ResponseEntity.status(HttpStatus.OK).body(userRepository.findAllAvailabilityMedics(availability));
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public ResponseEntity<?> findEmergency(String username) {
+
+        EmergencyDto emergencyDto = new EmergencyDto();
+        Optional<User> userDb = userRepository.findByUsername(username);
+
+        /* validar medico */
+        if (!userDb.isPresent()) {
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "Usuario no existe!");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        }
+
+        /* Encontrar la emergencia pendiente */
+        for (Emergency emergency : userDb.orElseThrow().getEmergencies()) {
+            System.out.println(emergency.getStatus());
+            if (emergency.getStatus().equals("PENDING") || emergency.getStatus() == "IN PROGRESS") {
+                System.out.println("emergencia pendiente!!");
+
+                emergencyDto.setComments(emergency.getComments());
+                emergencyDto.setCreation(emergency.getCreatedAt());
+                emergencyDto.setDescription(emergency.getDescription());
+                emergencyDto.setId(emergency.getId());
+                emergencyDto.setUpdateAt(emergency.getUpdatedAt());
+                emergencyDto.setSeverity(emergency.getSeverity());
+                emergencyDto.setStatus(emergency.getStatus());
+                emergencyDto.setVictims(emergency.getVictims());
+
+                List<String> users = new ArrayList<>();
+                for (User user : emergency.getUsers()) {
+                    users.add(user.getName() + " " + user.getLastname());
+                }
+                emergencyDto.setMedicNames(users);
+            }
+        }
+
+        return ResponseEntity.ok().body(emergencyDto);
     }
 
 }

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
+
 import com.martin.codigo.trauma.app.models.UserDto;
 
 public interface UserService {
@@ -15,5 +16,7 @@ public interface UserService {
     ResponseEntity<List<UserDto>> findAllMedics();
 
     ResponseEntity<List<UserDto>> findAllAvailabilityMedics(Boolean availability);
+
+    ResponseEntity<?> findEmergency(String username);
 
 }

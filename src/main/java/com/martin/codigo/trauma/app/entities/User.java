@@ -154,4 +154,14 @@ public class User {
         this.creation = creation;
     }
 
+    public List<Emergency> getEmergencies() {
+        return emergencies;
+    }
+
+    public void setEmergencies(List<Emergency> emergencies) {
+        this.emergencies = emergencies;
+    }
+
+    
+
 }
