@@ -95,4 +95,27 @@ public class EmergencyServiceImpl implements EmergencyService {
         return emergencies;
     }
 
+    @Transactional
+    @Override
+    public ResponseEntity<Map<String, Object>> updateStatus(Long id, String stauts) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'updateStatus'");
+    }
+
+    @Transactional
+    @Override
+    public ResponseEntity<Map<String, Object>> updateComments(Long id, String comments) {
+
+        Map<String, Object> response = new HashMap<>();
+
+        Optional<Emergency> emergencyDb = emergencyRepository.findById(id);
+        Emergency emergency = emergencyDb.orElseThrow();
+        emergency.setComments(comments);
+        emergencyRepository.save(emergency);
+
+        response.put("message", "Comentario actualizado correctamente!");
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
 }

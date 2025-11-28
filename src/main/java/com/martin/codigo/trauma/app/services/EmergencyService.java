@@ -13,4 +13,10 @@ public interface EmergencyService {
 
     List<EmergencyDto> findAllByOrderByCreation();
 
+    ResponseEntity<Map<String,Object>> updateStatus(Long id,String stauts);
+
+    ResponseEntity<Map<String,Object>> updateComments(Long id, String comments);
+
+
+
 }
