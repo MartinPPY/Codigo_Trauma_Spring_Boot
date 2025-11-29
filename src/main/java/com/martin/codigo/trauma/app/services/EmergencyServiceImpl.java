@@ -1,5 +1,6 @@
 package com.martin.codigo.trauma.app.services;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -98,8 +99,34 @@ public class EmergencyServiceImpl implements EmergencyService {
     @Transactional
     @Override
     public ResponseEntity<Map<String, Object>> updateStatus(Long id, String stauts) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'updateStatus'");
+        Map<String, Object> response = new HashMap<>();
+
+        Optional<Emergency> emergencyDb = emergencyRepository.findById(id);
+        /* validar emergencia */
+        if (!emergencyDb.isPresent()) {
+            response.put("message", "Emergencia no encontrada!");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        }
+        Emergency emergency = emergencyDb.orElseThrow();
+
+        emergency.setStatus(stauts);
+        emergency.setUpdatedAt(LocalDateTime.now());
+        emergencyRepository.save(emergency);
+
+        /* EN CASO DE SER RESUELTA O CANCELADA */
+        if (stauts.equals("RESOLVED") || stauts.equals("CANCELED")) {
+            emergency.setFinishedAt(LocalDateTime.now());
+
+            /* ACTUALIZAR DISPONIBLIDAD DE MEDICO */
+            for (User user : emergency.getUsers()) {
+                user.setAvailability(true);
+                userRepository.save(user);
+            }
+        }
+
+        response.put("message", "Emergencia actualizada!");
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+
     }
 
     @Transactional
@@ -112,6 +139,7 @@ public class EmergencyServiceImpl implements EmergencyService {
         Emergency emergency = emergencyDb.orElseThrow();
         emergency.setComments(comments);
         emergencyRepository.save(emergency);
+        emergency.setUpdatedAt(LocalDateTime.now());
 
         response.put("message", "Comentario actualizado correctamente!");
 

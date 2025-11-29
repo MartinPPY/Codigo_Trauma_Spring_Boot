@@ -30,13 +30,21 @@ public class MedicController {
         return userService.findEmergency(username);
     }
 
-    @PutMapping("/emergency/{id}")
+    @PutMapping("/emergency-comment/{id}")
     public ResponseEntity<Map<String, Object>> updateComments(@PathVariable Long id,
             @RequestBody Map<String, Object> request) {
-        
+
         String comment = request.get("comment").toString();
 
         return emergencyService.updateComments(id, comment);
+    }
+
+    @PutMapping("/emergency-status/{id}")
+    public ResponseEntity<Map<String, Object>> updateStatus(@PathVariable Long id,
+            @RequestBody Map<String, String> request) {
+
+        String status = request.get("status");
+        return emergencyService.updateStatus(id, status);
     }
 
 }

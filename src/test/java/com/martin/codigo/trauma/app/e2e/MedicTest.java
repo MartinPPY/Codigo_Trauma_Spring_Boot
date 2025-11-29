@@ -27,69 +27,73 @@ import com.martin.codigo.trauma.app.models.UserDto;
 @AutoConfigureMockMvc
 public class MedicTest {
 
-    @Container
-    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:16")
-            .withDatabaseName("test_db")
-            .withUsername("test")
-            .withPassword("test")
-            .withInitScript("db/init.sql");
+        @Container
+        static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:16")
+                        .withDatabaseName("test_db")
+                        .withUsername("test")
+                        .withPassword("test")
+                        .withInitScript("db/init.sql");
 
-    @DynamicPropertySource
-    static void registryPgProperties(DynamicPropertyRegistry registry) {
-        registry.add("spring.datasource.url", postgres::getJdbcUrl);
-        registry.add("spring.datasource.username", postgres::getUsername);
-        registry.add("spring.datasource.password", postgres::getPassword);
+        @DynamicPropertySource
+        static void registryPgProperties(DynamicPropertyRegistry registry) {
+                registry.add("spring.datasource.url", postgres::getJdbcUrl);
+                registry.add("spring.datasource.username", postgres::getUsername);
+                registry.add("spring.datasource.password", postgres::getPassword);
 
-    }
+        }
 
-    @Autowired
-    private MockMvc mockMvc;
+        @Autowired
+        private MockMvc mockMvc;
 
-    @Autowired
-    private ObjectMapper objectMapper;
+        @Autowired
+        private ObjectMapper objectMapper;
+
+        @Test
+        public void MedicE2ETest() throws Exception {
+
+                UserDto user = new UserDto("carla.torres", "Carla", "Torres", 111111111, "123",
+                                "martinsantiago.se@gmail.com");
 
 
-    @Test
-    public void MedicE2ETest() throws Exception {
-        UserDto user = new UserDto("carla.torres", "Carla", "Torres", 111111111, "123",
-                "martinsantiago.se@gmail.com");
+                Map<String, String> verificationRequest = new HashMap<>();
+                verificationRequest.put("email", user.getEmail());
 
-        Map<String, String> verificationRequest = new HashMap<>();
-        verificationRequest.put("email", user.getEmail());
+                Map<String, Object> request = new HashMap<>();
+                request.put("username", user.getUsername());
+                request.put("password", user.getPassword());
 
-        Map<String, Object> request = new HashMap<>();
-        request.put("username", user.getUsername());
-        request.put("password", user.getPassword());
+                /* VERIFICAR USER */
 
-        /* VERIFICAR USER */
+                ResultActions verificationResponse = mockMvc.perform(
+                                post("/auth/verificate-email")
+                                                .contentType(MediaType.APPLICATION_JSON)
+                                                .content(objectMapper.writeValueAsString(verificationRequest)));
 
-        ResultActions verificationResponse = mockMvc.perform(
-                post("/auth/verificate-email")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(verificationRequest)));
+                verificationResponse.andExpect(status().isOk())
+                                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                                .andExpect(jsonPath("$.verification").exists());
 
-        verificationResponse.andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.verification").exists());
+                /* REGISTRARSE */
+                ResultActions registerResponse = mockMvc.perform(
+                                put("/auth/register-user")
+                                                .contentType(MediaType.APPLICATION_JSON)
+                                                .content(objectMapper.writeValueAsString(user)));
 
-        /*  REGISTRARSE */
-        ResultActions registerResponse = mockMvc.perform(
-                put("/auth/register-user")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(user)));
+                registerResponse.andExpect(status().isOk())
+                                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                                .andExpect(jsonPath("$.message").exists());
 
-        registerResponse.andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.message").exists());
+                /* LOGIN DEL MEDICO */
+                ResultActions response = mockMvc.perform(
+                                post("/login").contentType(MediaType.APPLICATION_JSON)
+                                                .content(objectMapper.writeValueAsString(request)));
 
-        /* LOGIN */
-        ResultActions response = mockMvc.perform(
-                post("/login").contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(request)));
-
-        response.andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.token").exists());
-    }
+                response.andExpect(status().isOk())
+                                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                                .andExpect(jsonPath("$.token").exists());
+                
+                /* VER LA EMERGENCIA */        
+                
+        }
 
 }

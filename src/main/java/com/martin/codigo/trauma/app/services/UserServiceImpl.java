@@ -118,8 +118,7 @@ public class UserServiceImpl implements UserService {
         /* Encontrar la emergencia pendiente */
         for (Emergency emergency : userDb.orElseThrow().getEmergencies()) {
             System.out.println(emergency.getStatus());
-            if (emergency.getStatus().equals("PENDING") || emergency.getStatus() == "IN PROGRESS") {
-                System.out.println("emergencia pendiente!!");
+            if (emergency.getStatus().equals("PENDING") || emergency.getStatus().equals("IN PROGRES") ){
 
                 emergencyDto.setComments(emergency.getComments());
                 emergencyDto.setCreation(emergency.getCreatedAt());
