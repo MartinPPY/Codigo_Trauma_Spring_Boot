@@ -10,6 +10,10 @@ ademas esta una plantilla de como deben de ser las variables de entorno
 Con docker instalado y funcionando debes ejecutar esto en la terminal:
 ´ docker-compose up -d ´
 
+## Requisitos para ejecutar el proyecto
+- tener JDK 24
+- Docker instalado
+
 
 ### Reference Documentation
 
