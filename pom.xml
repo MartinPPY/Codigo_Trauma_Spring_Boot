@@ -11,9 +11,9 @@
 	</parent>
 	<groupId>com.martin.codigo.trauma</groupId>
 	<artifactId>app</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>app</name>
-	<description>Demo project for Spring Boot</description>
+	<version>0.0.1</version>
+	<name>codigo_trauma_app</name>
+	<description>Proyecto 4to Semestre</description>
 	<url />
 	<licenses>
 		<license />
@@ -127,9 +127,6 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
-
-		<finalName>app</finalName>
-
 	</build>
 
 </project>
