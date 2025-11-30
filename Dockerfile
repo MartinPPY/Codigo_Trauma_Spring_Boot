@@ -16,7 +16,7 @@ FROM openjdk:24-ea-1-jdk-slim
 WORKDIR /app
 
 # Copiamos el jar desde el stage anterior
-COPY --from=build /app/target/*.jar app.jar
+COPY --from=build /app/target/app-0.0.1.jar app.jar
 
 EXPOSE 8080
 
