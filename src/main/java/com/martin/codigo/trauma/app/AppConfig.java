@@ -41,10 +41,10 @@ public class AppConfig {
                 .authorizeHttpRequests(authz -> authz
                         .requestMatchers(HttpMethod.POST, "/auth/**").permitAll()
                         .requestMatchers(HttpMethod.PUT, "/auth/register-user").permitAll()
-                        .requestMatchers(HttpMethod.GET,"/admin/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST,"/admin/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.GET,"/medic/**").hasRole("MEDIC")
-                        .requestMatchers(HttpMethod.PUT,"/medic/**").hasRole("MEDIC")
+                        .requestMatchers(HttpMethod.GET, "/emergencies/**").hasAnyRole("MEDIC", "ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/emergencies").hasAnyRole("MEDIC", "ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/emergencies").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/emergencies/**").hasRole("MEDIC")
                         .anyRequest().authenticated())
                 .addFilter(new JwtAuthenticationFilter(authenticationManager()))
                 .addFilter(new JwtValidationFilter(authenticationManager()))
@@ -72,7 +72,5 @@ public class AppConfig {
 
         return source;
     }
-
-
 
 }
