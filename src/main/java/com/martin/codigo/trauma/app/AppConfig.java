@@ -45,6 +45,7 @@ public class AppConfig {
                         .requestMatchers(HttpMethod.GET, "/emergencies").hasAnyRole("MEDIC", "ADMIN")
                         .requestMatchers(HttpMethod.POST, "/emergencies").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/emergencies/**").hasRole("MEDIC")
+                        .requestMatchers(HttpMethod.GET, "/users/**").hasRole("ADMIN")
                         .anyRequest().authenticated())
                 .addFilter(new JwtAuthenticationFilter(authenticationManager()))
                 .addFilter(new JwtValidationFilter(authenticationManager()))
